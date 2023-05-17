@@ -1,0 +1,145 @@
+---
+title: "Summary_Data_Statistics"
+author: "Lucas Wang"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+#knitr::opts_chunk$set(echo = TRUE)
+
+# Import Libraries & Install Packages
+library(readxl) # Enables Excel file importing
+library(ggplot2) # Enables additonal plot types
+library(forcats)
+#install.packages("todor") # Enables comment highlighting
+
+
+```
+
+## Note: prelim analysis focusing on getting presentable values from data
+
+## Importing Excel File
+
+```{r import, include=FALSE}
+# sanitized_proposals_withdrawn_removed <- read_excel("sanitized_proposals_withdrawn_removed_and_org_sanitized.xlsx",
+#     col_types = c("text", "numeric", "text",
+#         "text", "text", "numeric", "numeric",
+#         "text", "text", "text", "text", "text",
+#         "text", "text", "text", "text", "text",
+#         "text", "text", "text", "text", "text",
+#         "text"))
+
+sanitized_proposals_withdrawn_removed <- read_excel("sanitized_proposals_withdrawn_removed_and_org_sanitized.xlsx")
+```
+
+## Basic Summary
+
+```{r basic_stats}
+summary(sanitized_proposals_withdrawn_removed)
+```
+
+## Column Analysis
+
+Distribution by year
+
+```{r dist_year}
+summary(sanitized_proposals_withdrawn_removed$Year)
+
+ggplot(sanitized_proposals_withdrawn_removed, aes(x=Year)) +
+  geom_bar() +
+  geom_text(aes(label = after_stat(count)), stat = 'count', vjust = -0.5) # NEED to be in this order!!!!!
+```
+
+Distribution by Status
+
+```{r dist_status}
+summary(sanitized_proposals_withdrawn_removed$Status)
+
+ggplot(sanitized_proposals_withdrawn_removed, aes(x=Status)) +
+  geom_bar() +
+  geom_text(aes(label = after_stat(count)), stat = 'count', vjust = -0.5)
+```
+
+Distribution by org: Alphabetical Order
+
+```{r dist_org alph, fig.width=15,fig.height=11}
+summary(sanitized_proposals_withdrawn_removed$Organization)
+
+# Alphabetical Orde
+ggplot(sanitized_proposals_withdrawn_removed, aes(x=Organization)) +
+theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  geom_bar() +
+  geom_text(aes(label = after_stat(count)), stat = 'count', vjust = -0.5)
+```
+
+Distribution by org: Proposal count high to low order
+
+```{r dist_org high_to_low, fig.width=15,fig.height=11}
+# Count of organizational proposal from high to low
+ggplot(sanitized_proposals_withdrawn_removed, aes(x=fct_infreq(Organization))) +
+theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  geom_bar() +
+  geom_text(aes(label = after_stat(count)), stat = 'count', vjust = -0.5)
+```
+Total requested, total awarded, min_max requested, and min_max awarded
+
+```{r dist_request}
+sum(sanitized_proposals_withdrawn_removed$Request)
+min(sanitized_proposals_withdrawn_removed$Request)
+max(sanitized_proposals_withdrawn_removed$Request)
+
+sum(sanitized_proposals_withdrawn_removed$Award)
+min(sanitized_proposals_withdrawn_removed$Award)
+max(sanitized_proposals_withdrawn_removed$Award)
+```
+
+
+Distribution by All Requests
+
+```{r dist_request}
+summary(sanitized_proposals_withdrawn_removed$Request)
+
+hist(sanitized_proposals_withdrawn_removed$Request)
+```
+
+Distribution by All Awards
+
+```{r dist_award}
+summary(sanitized_proposals_withdrawn_removed$Award)
+
+hist(sanitized_proposals_withdrawn_removed$Award)
+```
+
+Distribution by Request per organization
+
+```{r dist_request}
+summary(sanitized_proposals_withdrawn_removed$Request)
+
+hist(sanitized_proposals_withdrawn_removed$Request)
+```
+
+
+Distribution by Award per organization
+
+```{r dist_award}
+summary(sanitized_proposals_withdrawn_removed$Award)
+
+hist(sanitized_proposals_withdrawn_removed$Award)
+```
+
+Distribution by Abstract Length
+
+```{r dist_org}
+summary(sanitized_proposals_withdrawn_removed$Abstract)
+
+```
+
+## Fun Facts:
+
+Longest & shortest abstracts
+
+```{r abs_fun}
+min(sanitized_proposals_withdrawn_removed$Request)
+max(sanitized_proposals_withdrawn_removed$Award)
+```
